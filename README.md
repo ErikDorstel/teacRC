@@ -11,3 +11,7 @@ ESP32 based TEAC A-H500 Remote Control
 #### GPIO
 * GPIO 16 - IR input
 * GPIO 17 - IR output
+#### Web UI
+![IMAGE ALT TEXT HERE](documentation/webUI.png)
+#### Schematic
+![IMAGE ALT TEXT HERE](documentation/teacRC.png)
