@@ -27,7 +27,7 @@ td     { text-align:right; }
 <script>
 
 function webUIinit() {
-  currentPow=false; currentVol=0; currentSrc=0;
+  currentPow=false; currentVol=0; muteVol=0; currentSrc=0;
   red="#E09090"; green="#90E090"; yellow="#FFE460"; gray="#e0e0e0"; darkgray="#d0d0d0"; blue="#c2d5ed";
   appName="&nbsp;"; appDesc="&nbsp;"; ajaxObj=[]; requestAJAX('appName'); setStateTimer(true); }
 
@@ -40,10 +40,12 @@ function doDisplay() {
   for (i=0;i<6;i++) { if (i==currentSrc && currentPow) { id("sourceBut"+i).style.backgroundColor=darkgray; }
     else { id("sourceBut"+i).style.backgroundColor=gray; } } }
 
-function doPowerOn() { requestAJAX('powerOn'); setStateTimer(false); currentPow=true; currentVol=3; doDisplay(); }
-function doStandbyOn() { requestAJAX('standbyOn'); setStateTimer(false); currentPow=false; currentVol=0; doDisplay(); }
-function doVolumeUp() { if (currentPow) { requestAJAX('volumeUp'); setStateTimer(false); currentVol++; doDisplay(); } }
-function doVolumeDown() { if (currentPow && currentVol) { requestAJAX('volumeDown'); setStateTimer(false); currentVol--; doDisplay(); } }
+function doPowerOn() { requestAJAX('powerOn'); setStateTimer(false); currentPow=true; currentVol=3; muteVol=0; doDisplay(); }
+function doStandbyOn() { requestAJAX('standbyOn'); setStateTimer(false); currentPow=false; currentVol=0; muteVol=0; doDisplay(); }
+function doVolume(value) { if (currentPow) { requestAJAX('volume,'+value); setStateTimer(false); currentVol=value; doDisplay(); } }
+function doVolumeUp() { if (currentPow) { requestAJAX('volumeUp'); setStateTimer(false); currentVol++; muteVol=0; doDisplay(); } }
+function doVolumeDown() { if (currentPow && currentVol) { requestAJAX('volumeDown'); setStateTimer(false); currentVol--; muteVol=0; doDisplay(); } }
+function doVolumeMute() { if (currentPow) { if (muteVol) { doVolume(muteVol); muteVol=0; } else { muteVol=currentVol; doVolume(0); } } }
 function doSource(value) { if (currentPow) { requestAJAX('source,'+value); setStateTimer(false); currentSrc=value; doDisplay(); } }
 
 function setStateTimer(now) { clearStateTimer(); statusTimer=window.setInterval("getState();",10000); if (now) { getState(); } }
@@ -84,7 +86,7 @@ function id(id) { return document.getElementById(id); }
 <div><div class="x3" id="sourceBut3" onclick="doSource(3);">Tuner</div>
      <div class="x3" id="sourceBut4" onclick="doSource(4);">Phono</div>
      <div class="x3" id="sourceBut5" onclick="doSource(5);">Aux</div></div>
-<div><div class="x3" id="volumeBut">&nbsp;</div>
+<div><div class="x3" id="volumeBut" onclick="doVolumeMute();">&nbsp;</div>
      <div class="x3" onclick="doVolumeDown();"><span class="but">&nbsp;&nbsp;&#8722;&nbsp;&nbsp;</span></div>
      <div class="x3" onclick="doVolumeUp();"><span class="but">&nbsp;&nbsp;+&nbsp;&nbsp;</span></div></div>
 </div>
