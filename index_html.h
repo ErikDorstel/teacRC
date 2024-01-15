@@ -42,6 +42,7 @@ function doDisplay() {
 
 function doPowerOn() { requestAJAX('powerOn'); setStateTimer(false); currentPow=true; currentVol=3; muteVol=0; doDisplay(); }
 function doStandbyOn() { requestAJAX('standbyOn'); setStateTimer(false); currentPow=false; currentVol=0; muteVol=0; doDisplay(); }
+function doPowerToggle() { if (currentPow) { doStandbyOn(); } else { doPowerOn(); } }
 function doVolume(value) { if (currentPow) { requestAJAX('volume,'+value); setStateTimer(false); currentVol=value; doDisplay(); } }
 function doVolumeUp() { if (currentPow) { requestAJAX('volumeUp'); setStateTimer(false); currentVol++; muteVol=0; doDisplay(); } }
 function doVolumeDown() { if (currentPow && currentVol) { requestAJAX('volumeDown'); setStateTimer(false); currentVol--; muteVol=0; doDisplay(); } }
@@ -77,7 +78,7 @@ function id(id) { return document.getElementById(id); }
 <div><div class="x1b" onclick="location.replace('/chooseAP');">Choose WLAN AP</div></div>
 
 <div>
-<div><div class="x3" id="powerBut">Power</div>
+<div><div class="x3" id="powerBut" onclick="doPowerToggle();">Power</div>
      <div class="x3" onclick="doPowerOn();"><span class="but">&nbsp;&nbsp;&nbsp;On&nbsp;&nbsp;&nbsp;</span></div>
      <div class="x3" onclick="doStandbyOn();"><span class="but">Standby</span></div></div>
 <div><div class="x3" id="sourceBut0" onclick="doSource(0);">MD</div>
