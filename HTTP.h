@@ -1,4 +1,5 @@
 WiFiServer tcpServer(80);
+#define requestTimeout 5000
 
 #include "index_html.h"
 #include "choose_html.h"
@@ -9,8 +10,9 @@ void initHTTP() { tcpServer.begin(); }
 
 void httpWorker() {
   WiFiClient httpClient=tcpServer.available(); String header="";
-  if (httpClient) { String currentLine="";
+  if (httpClient) { String currentLine=""; uint64_t requestTimer=millis()+requestTimeout;
     while (httpClient.connected()) {
+      if (millis()>=requestTimer) { httpClient.println("Request timeout"); break; }
       if (httpClient.available()) { char c=httpClient.read(); header+=c;
         if (c=='\n') {
           if (currentLine.length()==0) {
